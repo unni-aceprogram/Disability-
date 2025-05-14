@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IndiGo Domestic Airports Learning Module</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background-color: #f4f4f9;
+      color: #333;
+    }
+
+    h1, h2, h3 {
+      color: #004080;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 40px;
+    }
+
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #004080;
+      color: white;
+    }
+
+    .region-title {
+      margin-top: 40px;
+    }
+
+    /* Sticky Note Container */
+    #stickyNoteContainer {
+      position: fixed;
+      right: 40px;
+      bottom: 100px;
+      width: 250px;
+      background-color: #ffff88;
+      padding: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      display: none;
+      z-index: 999;
+    }
+
+    #stickyNoteContainer h3 {
+      margin-top: 0;
+    }
+
+    #stickyNote {
+      width: 100%;
+      height: 100px;
+      padding: 5px;
+      font-size: 14px;
+    }
+
+    /* Sticky Note Toggle Button */
+    #toggleStickyNote {
+      position: fixed;
+      bottom: 40px;
+      right: 40px;
+      width: 50px;
+      height: 50px;
+      background-color: #004080;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      z-index: 1000;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        margin: 20px;
+      }
+
+      #stickyNoteContainer {
+        width: 90%;
+        right: 5%;
+        bottom: 90px;
+      }
+
+      #toggleStickyNote {
+        right: 5%;
+        bottom: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>IndiGo Domestic Airports - Learning Module</h1>
+
+  <div id="contentContainer"></div>
+
+  <div id="stickyNoteContainer">
+    <h3>Sticky Note</h3>
+    <textarea id="stickyNote" placeholder="Write your notes here..."></textarea>
+  </div>
+
+  <button id="toggleStickyNote">📝</button>
+
+  <script>
+     const airportsByRegion = {
+     North: [
+      ["Agra", "Agra", "Agra Airport", "AGR"],
+  ["Allahabad", "Allahabad", "Allahabad Airport", "IXD"],
+  ["Amritsar", "Amritsar", "Sri Guru Ram Dass Jee International Airport", "ATQ"],
+  ["Bareilly", "Bareilly", "Bareilly Airport", "BEK"],
+  ["Bhopal", "Bhopal", "Raja Bhoj Airport", "BHO"],
+  ["Chandigarh", "Chandigarh", "Chandigarh Airport", "IXC"],
+  ["Dehradun", "Dehradun", "Jolly Grant Airport", "DED"],
+  ["Delhi", "Delhi", "Indira Gandhi International Airport – Terminal 1,2,3", "DEL"],
+  ["Dharamshala", "Dharamshala", "Kangra Airport", "DHM"],
+  ["Gorakhpur", "Gorakhpur", "Gorakhpur Airport", "GOP"],
+  ["Gwalior", "Gwalior", "Gwalior Airport", "GWL"],
+  ["Jabalpur", "Jabalpur", "Jabalpur Airport", "JLR"],
+  ["Jammu", "Jammu", "Jammu Airport", "IXJ"],
+  ["Kanpur", "Kanpur", "Kanpur Airport", "KNU"],
+  ["Khajuraho", "Khajuraho", "Khajuraho Airport", "HJR"],
+  ["Leh", "Leh", "Kushok Bakula Rimpochee Airport", "IXL"],
+  ["Lucknow", "Lucknow", "Chaudhary Charan Singh International Airport", "LKO"],
+  ["Pantnagar", "Pantnagar", "Pantnagar Airport", "PGH"],
+  ["Srinagar", "Srinagar", "Sheikh ul-Alam International Airport", "SXR"],
+  ["Varanasi", "Varanasi", "Lal Bahadur Shastri International Airport", "VNS"],
+  ["Ayodhya", "Ayodhya", "Maharishi Valmiki International Airport", "AYJ"]
+    ],
+    South: [
+      ["Bengaluru", "Bengaluru", "Kempegowda International Airport", "BLR"],
+  ["Belagavi", "Belagavi", "Belagavi Airport", "IXG"],
+  ["Coimbatore", "Coimbatore", "Coimbatore International Airport", "CJB"],
+  ["Hubballi", "Hubballi", "Hubballi Airport", "HBX"],
+  ["Madurai", "Madurai", "Madurai Airport", "IXM"],
+  ["Mangaluru", "Mangaluru", "Mangalore International Airport", "IXE"],
+  ["Mysuru", "Mysuru", "Mysuru Airport", "MYQ"],
+  ["Salem", "Salem", "Salem Airport", "SXV"],
+  ["Shivamogga", "Shivamogga", "Shivamogga Airport", "RQY"],
+  ["Thottukudi", "Thottukudi", "Tuticorin Airport", "TCR"],
+  ["Tiruchirappalli", "Tiruchirappalli", "Tiruchirappalli International Airport", "TRZ"],
+   ["Hyderabad", "Hyderabad", "Rajiv Gandhi International Airport", "HYD"],
+  ["Kadapa", "Kadapa", "Kadapa Airport", "CDP"],
+  ["Kurnool", "Kurnool", "Kurnool Airport", "KJB"],
+  ["Rajahmundry", "Rajahmundry", "Rajahmundry Airport", "RJA"],
+  ["Tirupati", "Tirupati", "Tirupati Airport", "TIR"],
+  ["Vijayawada", "Vijayawada", "Vijayawada Airport", "VGA"],
+  ["Visakhapatnam", "Visakhapatnam", "Visakhapatnam Airport", "VTZ"],
+   ["Chennai", "Chennai", "Chennai International Airport", "MAA"],
+  ["Kannur", "Kannur", "Kannur International Airport", "CNN"],
+  ["Kochi", "Kochi", "Cochin International Airport", "COK"],
+  ["Kozhikode", "Kozhikode", "Calicut International Airport", "CCJ"],
+  ["Thiruvananthapuram", "Thiruvananthapuram", "Trivandrum International Airport", "TRV"],
+  ["Agatti", "Agatti", "Agatti Aerodrome", "AGX"],
+  ["Puducherry", "Puducherry", "Puducherry Airport", "PNY"]
+    ],
+
+    East: [
+     ["Bhubaneswar", "Bhubaneswar", "Biju Patnaik International Airport", "BBI"],
+  ["Agartala", "Agartala", "Maharaja Bir Bikram Airport", "IXA"],
+  ["Aizawl", "Aizawl", "Lengpui Airport", "AJL"],
+  ["Bagdogra", "Bagdogra", "Bagdogra Airport", "IXB"],
+  ["Darbhanga", "Darbhanga", "Darbhanga Airport", "DBR"],
+  ["Deoghar", "Deoghar", "Deoghar Airport", "DGH"],
+  ["Dibrugarh", "Dibrugarh", "Dibrugarh Airport", "DIB"],
+  ["Dimapur", "Dimapur", "Dimapur Airport", "DMU"],
+  ["Durgapur", "Durgapur", "Kazi Nazrul Islam Airport", "RDP"],
+  ["Gaya", "Gaya", "Gaya Airport", "GAY"],
+  ["Guwahati", "Guwahati", "Lokpriya Gopinath Bordoloi International Airport", "GAU"],
+  ["Imphal", "Imphal", "Imphal International Airport", "IMF"],
+  ["Itanagar", "Itanagar", "Itanagar Airport", "HGI"],
+  ["Jagdalpur", "Jagdalpur", "Jagdalpur Airport", "JGB"],
+  ["Jorhat", "Jorhat", "Jorhat Airport", "JRH"],
+  ["Jharsuguda", "Jharsuguda", "Veer Surendra Sai Airport", "JRG"],
+  ["Kolkata", "Kolkata", "Netaji Subhas Chandra Bose International Airport", "CCU"],
+  ["Patna", "Patna", "Jay Prakash Narayan International Airport", "PAT"],
+  ["Port Blair", "Port Blair", "Veer Savarkar International Airport", "IXZ"],
+  ["Raipur", "Raipur", "Swami Vivekananda Airport", "RPR"],
+  ["Ranchi", "Ranchi", "Birsa Munda Airport", "IXR"],
+  ["Shillong", "Shillong", "Shillong Airport", "SHL"],
+  ["Silchar", "Silchar", "Silchar Airport", "IXS"]
+],
+    West: [
+      ["Ahmedabad", "Ahmedabad", "Sardar Vallabhbhai Patel International Airport", "AMD"],
+  ["Bikaner", "Bikaner", "Nal Airport", "BKB"],
+  ["Aurangabad", "Aurangabad", "Aurangabad Airport", "IXU"],
+  ["Diu", "Diu", "Diu Airport", "DIU"],
+  ["Rajkot", "Rajkot", "Rajkot Airport", "HSR"],
+  ["Indore", "Indore", "Devi Ahilya Bai Holkar Airport", "IDR"],
+  ["Jaipur", "Jaipur", "Jaipur International Airport", "JAI"],
+  ["Jaisalmer", "Jaisalmer", "Jaisalmer Airport", "JSA"],
+  ["Jodhpur", "Jodhpur", "Jodhpur Airport", "JDH"],
+  ["Kolhapur", "Kolhapur", "Kolhapur Airport", "KLH"],
+  ["Kishangarh", "Kishangarh", "Kishangarh Airport", "KQH"],
+  ["Mumbai", "Mumbai", "Chhatrapati Shivaji Maharaj International Airport – Terminal 1,2", "BOM"],
+  ["Nagpur", "Nagpur", "Dr. Babasaheb Ambedkar International Airport", "NAG"],
+  ["Nasik", "Nasik", "Nashik Airport", "ISK"],
+  ["North Goa", "North Goa", "Manohar International Airport (Mopa)", "GOX"],
+  ["Pune", "Pune", "Pune Airport", "PNQ"],
+  ["Shirdi", "Shirdi", "Shirdi Airport", "SAG"],
+  ["Surat", "Surat", "Surat Airport", "STV"],
+  ["Udaipur", "Udaipur", "Maharana Pratap Airport", "UDR"],
+  ["Goa", "Goa", "Dabolim Airport", "GOI"],
+  ["Gondia", "Gondia", "Birsi Airport", "GDB"],
+  ["Vadodara", "Vadodara", "Vadodara Airport", "BDQ"]
+    ],
+  };
+
+
+
+    function renderAirportTables() {
+      const container = document.getElementById('contentContainer');
+      container.innerHTML = '';
+
+      for (const region in airportsByRegion) {
+        const regionTitle = document.createElement('h2');
+        regionTitle.className = 'region-title';
+        regionTitle.textContent = region + ' Region';
+        container.appendChild(regionTitle);
+
+        const table = document.createElement('table');
+        const thead = document.createElement('thead');
+        const headerRow = document.createElement('tr');
+        ['State/UT', 'City', 'Airport Name', 'IATA Code'].forEach(text => {
+          const th = document.createElement('th');
+          th.textContent = text;
+          headerRow.appendChild(th);
+        });
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+
+        const tbody = document.createElement('tbody');
+        airportsByRegion[region].forEach(([state, city, name, code]) => {
+          const row = document.createElement('tr');
+          [state, city, name, code].forEach(cellData => {
+            const td = document.createElement('td');
+            td.textContent = cellData;
+            row.appendChild(td);
+          });
+          tbody.appendChild(row);
+        });
+
+        table.appendChild(tbody);
+        container.appendChild(table);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderAirportTables();
+
+      const toggleBtn = document.getElementById('toggleStickyNote');
+      const noteContainer = document.getElementById('stickyNoteContainer');
+      const stickyNote = document.getElementById('stickyNote');
+
+      // Load sticky note from localStorage
+      const savedNote = localStorage.getItem('stickyNoteContent');
+      if (savedNote) {
+        stickyNote.value = savedNote;
+      }
+
+      // Save to localStorage on input
+      stickyNote.addEventListener('input', () => {
+        localStorage.setItem('stickyNoteContent', stickyNote.value);
+      });
+
+      // Toggle visibility
+      toggleBtn.addEventListener('click', () => {
+        noteContainer.style.display = 
+          (noteContainer.style.display === 'none' || noteContainer.style.display === '')
+          ? 'block'
+          : 'none';
+      });
+    });
+  </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IATA CODES</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js" defer></script>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f7fb; padding: 20px; margin: 0; color: #333; }
+    .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; }
+    .progress-container { flex: 1; background: #ddd; height: 10px; border-radius: 5px; overflow: hidden; margin-right: 15px; min-width: 200px; }
+    .progress-bar { height: 10px; width: 0%; background-color: #3498db; transition: width 0.5s; }
+    .question-counter { font-size: 14px; color: #555; min-width: 70px; text-align: right; margin-top: 5px; }
+    h2 { text-align: center; color: #2c3e50; margin-bottom: 30px; }
+    .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 6px 18px rgba(0,0,0,0.1); max-width: 600px; margin: auto; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .timer { font-size: 16px; font-weight: bold; padding: 6px 12px; border-radius: 6px; }
+    .timer.green { color: #28a745; }
+    .timer.red { color: #e74c3c; }
+    .question { font-size: 20px; margin-bottom: 10px; }
+    .options label { display: block; padding: 12px; border-radius: 6px; border: 1px solid #ccc; margin-bottom: 12px; cursor: pointer; transition: background 0.2s; }
+    .options label:hover { background: #eef6ff; }
+    .options input[type="radio"] { margin-right: 10px; }
+    .btn { background: #2980b9; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 15px; margin: 10px 5px 0 5px; }
+    .btn:disabled { background: #bdc3c7; cursor: not-allowed; }
+    .score-display { background: #e6f9e6; padding: 15px; margin-bottom: 20px; border-left: 5px solid #28a745; border-radius: 8px; max-width: 600px; margin: 0 auto 20px; text-align: center; }
+    table.history-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+    table.history-table th, table.history-table td { padding: 8px; text-align: center; border-bottom: 1px solid #ddd; }
+    table.history-table th { background: #f0f0f0; }
+    .latest-score { background: #fff9c4; font-weight: bold; }
+    .sort-button { background: none; border: none; font-size: 16px; cursor: pointer; color: #2980b9; margin-bottom: 10px; }
+    .sort-button:hover { text-decoration: underline; }
+    .sound-toggle { font-size: 16px; cursor: pointer; user-select: none; margin-left: 15px; }
+    .sound-toggle:hover { color: #3498db; }
+    .asked-in { font-size: 14px; color: #777; font-weight: normal; margin-left: 8px; }
+    .footnote { text-align: center; margin-top: 40px; font-size: 14px; color: #888; }
+    .explanation { margin-top: 20px; background: #eef6ff; padding: 15px; border-radius: 8px; }
+    .correct { background: #d4edda !important; }
+    .wrong { background: #f8d7da !important; }
+    #start-button { display: block; margin: 0 auto; padding: 10px 20px; background-color: #2980b9; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; }
+    #start-button:hover { background-color: #3498db; }
+    #quiz-container { display: none; }
+    .highlight-latest-result {
+      background-color: #d4edda;
+      color: #155724;
+      border-left: 6px solid #28a745;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      margin: 0 auto 20px auto;
+      max-width: 600px;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+    .history-actions {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .alert {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(255, 0, 0, 0.8);
+      color: white;
+      padding: 10px;
+      font-weight: bold;
+      border-radius: 6px;
+      display: none;
+      z-index: 9999;
+    }
+    .pagination-info {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .history-actions button {
+      display: inline-block;
+      margin: 10px;
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
+  <div class="question-counter" id="question-counter">Ready?</div>
+  <div class="sound-toggle" onclick="toggleSound()"><span id="sound-icon">🔊</span> <span id="sound-text">Sound ON</span></div>
+</div>
+
+<h2>IATA CODES</h2>
+
+<div id="score-container"></div>
+<div id="quiz-container"></div>
+<div class="alert" id="alert">Hurry up! Time's running out!</div>
+
+<button id="start-button" onclick="startQuiz()">Start Quiz</button>
+
+<audio id="correct-sound" src="https://dm0qx8t0i9gc9.cloudfront.net/watermarks/audio/B4CWlP_CIkc1kju2x/audioblocks-feedback-correct-07_HiQUhCpDv_WM.mp3" preload="auto"></audio>
+<audio id="wrong-sound" src="https://www.soundjay.com/buttons/sounds/button-10.mp3" preload="auto"></audio>
+<div class="footnote">Prepared by Krishnanunni, ifly BLR</div>
+<script>
+const progressBar = document.getElementById("progress-bar");
+const questionCounter = document.getElementById("question-counter");
+const container = document.getElementById("quiz-container");
+const scoreContainer = document.getElementById("score-container");
+const correctSound = document.getElementById("correct-sound");
+const wrongSound = document.getElementById("wrong-sound");
+const startButton = document.getElementById("start-button");
+const alertElement = document.getElementById("alert");
+
+let currentIndex = 0, score = 0, startTime, timerInterval, sortNewestFirst = true;
+let answeredQuestions = [];
+
+const RESULTS_PER_PAGE = 5;
+let currentPage = 1;
+
+const quizData =[
+  {
+    "question": "What is the IATA code for Indira Gandhi International Airport in Delhi?",
+    "options": ["DEL", "BOM", "BLR", "MAA"],
+    "answer_index": 0,
+    "explanation": "The IATA code for Indira Gandhi International Airport in Delhi is DEL. It is the busiest airport in India and among the top 20 busiest airports in the world."
+  },
+  {
+    "question": "What is the IATA code for Chhatrapati Shivaji Maharaj International Airport in Mumbai?",
+    "options": ["DEL", "MAA", "BOM", "BLR"],
+    "answer_index": 2,
+    "explanation": "The IATA code for Mumbai Airport is BOM. Terminal 2 of this airport won the 2014 World Architecture Festival award for its unique design."
+  },
+  {
+    "question": "What is the IATA code for Kempegowda International Airport in Bengaluru?",
+    "options": ["MAA", "BLR", "DEL", "BOM"],
+    "answer_index": 1,
+    "explanation": "The IATA code for Bengaluru Airport is BLR. It is India’s first fully solar-powered airport and a major tech hub gateway."
+  },
+  {
+    "question": "What is the IATA code for Chennai International Airport?",
+    "options": ["BLR", "DEL", "MAA", "BOM"],
+    "answer_index": 2,
+    "explanation": "The IATA code for Chennai Airport is MAA. It is one of the oldest airports in India, operational since 1932."
+  },
+  {
+    "question": "What is the IATA code for Netaji Subhas Chandra Bose International Airport in Kolkata?",
+    "options": ["BOM", "BLR", "DEL", "CCU"],
+    "answer_index": 3,
+    "explanation": "The IATA code for Kolkata Airport is CCU. It was the first airport in eastern India to have a major international terminal upgrade."
+  },
+  {
+    "question": "What is the IATA code for Kurnool Airport in Andhra Pradesh?",
+    "options": ["JRG", "DBR", "KJB", "JRH"],
+    "answer_index": 2,
+    "explanation": "The IATA code for Kurnool Airport is KJB. It was inaugurated in 2021 and is named after Uyyalawada Narasimha Reddy, a freedom fighter from the region."
+  },
+  {
+    "question": "What is the IATA code for Jorhat Airport (Rowriah Airport) in Assam?",
+    "options": ["DBR", "JRH", "JRG", "KJB"],
+    "answer_index": 1,
+    "explanation": "The IATA code for Jorhat Airport is JRH. It serves as a base for the Indian Air Force and provides access to Majuli, the world’s largest river island."
+  },
+  {
+    "question": "What is the IATA code for Darbhanga Airport in Bihar?",
+    "options": ["JRH", "DBR", "KJB", "JRG"],
+    "answer_index": 1,
+    "explanation": "The IATA code for Darbhanga Airport is DBR. It is one of the fastest-growing airports in eastern India, opened for commercial flights in 2020."
+  },
+  {
+    "question": "What is the IATA code for Pakyong Airport in Sikkim?",
+    "options": ["KJB", "DBR", "PYG", "JRH"],
+    "answer_index": 2,
+    "explanation": "The IATA code for Pakyong Airport is PYG. It is one of the highest-altitude airports in India, offering stunning views of the Himalayas."
+  },
+  {
+    "question": "What is the IATA code for Jharsuguda Airport in Odisha?",
+    "options": ["PYG", "JRG", "KJB", "DBR"],
+    "answer_index": 1,
+    "explanation": "The IATA code for Jharsuguda Airport is JRG. It is also known as Veer Surendra Sai Airport, named after a legendary freedom fighter from Odisha."
+  }
+]
+
+
+
+
+function saveScore(score, totalQuestions) {
+  const totalTime = Math.floor((Date.now() - startTime) / 1000);
+  const percentage = Math.round((score / totalQuestions) * 100);
+  const history = JSON.parse(localStorage.getItem("quizHistory")) || [];
+  history.push({
+    title: document.querySelector("h2").textContent,
+    score,
+    totalQuestions,
+    percentage,
+    time: `${Math.floor(totalTime / 60)}m ${totalTime % 60}s`,
+    date: new Date().toLocaleString()
+  });
+  localStorage.setItem("quizHistory", JSON.stringify(history));
+}
+
+function renderQuestion(index) {
+  clearInterval(timerInterval);
+  alertElement.style.display = "none";
+  const q = quizData[index];
+  container.innerHTML = `
+    <div class="card">
+      <div class="header"><div class="timer green" id="timer"></div></div>
+      <div class="question">${q.question}</div>
+      <div class="options">
+        ${q.options.map((opt, i) =>
+          `<label><input type="radio" name="option" value="${i}">${opt}</label>`).join("")}
+      </div>
+      <button class="btn" id="submit-btn">Submit</button>
+    </div>
+  `;
+  progressBar.style.width = `${((index + 1) / quizData.length) * 100}%`;
+  questionCounter.textContent = `Q ${index + 1} / ${quizData.length}`;
+  document.getElementById("submit-btn").onclick = () => submitAnswer(index);
+  startTimer();
+}
+
+function submitAnswer(index) {
+  if (answeredQuestions[index]) return;
+  const selected = document.querySelector('input[name="option"]:checked');
+  if (!selected) return;
+  clearInterval(timerInterval);
+  alertElement.style.display = "none";
+
+  const correctIndex = quizData[index].answer_index;
+  const allOptions = document.querySelectorAll('input[name="option"]');
+  allOptions.forEach(opt => opt.disabled = true);
+
+  const selectedLabel = selected.closest("label");
+  const correctLabel = allOptions[correctIndex].closest("label");
+
+  const isCorrect = parseInt(selected.value) === correctIndex;
+  isCorrect ? (score++, selectedLabel.classList.add("correct")) : (selectedLabel.classList.add("wrong"), correctLabel.classList.add("correct"));
+
+  showResult(isCorrect);
+  answeredQuestions[index] = true;
+
+  const explanation = quizData[index].explanation;
+  const card = document.querySelector(".card");
+  const explanationDiv = document.createElement("div");
+  explanationDiv.className = "explanation";
+  explanationDiv.textContent = `Explanation: ${explanation}`;
+
+  const nextButton = document.createElement("button");
+  nextButton.className = "btn";
+  nextButton.textContent = currentIndex + 1 < quizData.length ? "Next Question" : "Finish Quiz";
+  nextButton.onclick = () => {
+    currentIndex++;
+    currentIndex < quizData.length ? renderQuestion(currentIndex) : endQuiz();
+  };
+
+  card.appendChild(explanationDiv);
+  card.appendChild(nextButton);
+  explanationDiv.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function startTimer() {
+  let remainingTime = 30;
+  const timer = document.getElementById("timer");
+  timer.textContent = `Time: ${remainingTime}s`;
+  timer.className = "timer green";
+
+  timerInterval = setInterval(() => {
+    remainingTime--;
+    timer.textContent = `Time: ${remainingTime}s`;
+
+    if (remainingTime <= 10) {
+      timer.className = "timer red";
+      if (container.style.display === "block") {
+        alertElement.style.display = "block";
+      }
+    } else {
+      alertElement.style.display = "none";
+    }
+
+    if (remainingTime <= 0) {
+      clearInterval(timerInterval);
+      alertElement.style.display = "none";
+      submitAnswer(currentIndex);
+    }
+  }, 1000);
+}
+
+function showResult(correct) {
+  const sound = correct ? correctSound : wrongSound;
+  sound.currentTime = 0;
+  sound.play();
+  if (correct) triggerConfetti();
+  if (correct) {
+    setTimeout(() => { sound.pause(); sound.currentTime = 0; }, 2400);
+  }
+}
+
+function triggerConfetti() {
+  confetti({ particleCount: 100, spread: 70, origin: { x: 0.5, y: 0.5 }, colors: ['#ff0', '#ff5c5c', '#5c5cff', '#4caf50'] });
+}
+
+function startQuiz() {
+  score = 0;
+  currentIndex = 0;
+  answeredQuestions = new Array(quizData.length).fill(false);
+  startTime = Date.now();
+  startButton.style.display = "none";
+  container.style.display = "block";
+  renderQuestion(currentIndex);
+}
+
+function endQuiz() {
+  clearInterval(timerInterval);
+  alertElement.style.display = "none";
+  const percentage = ((score / quizData.length) * 100).toFixed(1);
+  scoreContainer.innerHTML = `
+    <div class="highlight-latest-result">🎉 You scored ${score} / ${quizData.length} (${percentage}%)</div>
+    <div class="score-display">
+      <p>Your Score: ${score} out of ${quizData.length}</p>
+      <p>Percentage: ${percentage}%</p>
+      <p>Time Taken: ${Math.floor((Date.now() - startTime) / 1000)} seconds</p>
+      <div class="history-actions">
+        <button class="btn" onclick="viewHistory()">📖 View History</button>
+        <button class="btn" onclick="restartQuiz()">🔄 Restart Quiz</button>
+      </div>
+    </div>
+  `;
+  container.style.display = "none";
+  saveScore(score, quizData.length);
+}
+
+  function viewHistory() {
+    clearInterval(timerInterval);
+    alertElement.style.display = "none";
+    const history = JSON.parse(localStorage.getItem("quizHistory")) || [];
+    const sorted = [...history];
+    if (sortNewestFirst) sorted.reverse();
+    const paginated = sorted.slice((currentPage - 1) * RESULTS_PER_PAGE, currentPage * RESULTS_PER_PAGE);
+
+    let html = `
+      <h3>Quiz History</h3>
+      <p>Total Attempts: ${history.length}</p>
+      <button class="sort-button" onclick="toggleSortOrder()">Sort: ${sortNewestFirst ? "Newest First ⬆️" : "Oldest First ⬇️"}</button>
+      <table class="history-table">
+        <thead><tr><th>Date</th><th>Quiz Title</th><th>Score</th><th>Percentage</th><th>Time</th></tr></thead>
+        <tbody>
+    `;
+
+    paginated.forEach((entry, i) => {
+      html += `<tr${i === 0 && currentPage === 1 ? ' class="latest-score"' : ""}>
+        <td>${entry.date}</td>
+        <td>${entry.title}</td>
+        <td>${entry.score} / ${entry.totalQuestions}</td>
+        <td>${entry.percentage}%</td>
+        <td>${entry.time}</td>
+      </tr>`;
+    });
+
+    html += `
+        </tbody>
+      </table>
+      <div class="pagination-info">Page ${currentPage}</div>
+      <div class="history-actions">
+        <button class="btn" onclick="navigateHistory(-1)" ${currentPage <= 1 ? "style='display:none'" : ""}>Previous</button>
+        <button class="btn" onclick="navigateHistory(1)" ${(currentPage * RESULTS_PER_PAGE >= sorted.length) ? "disabled" : ""}>Next</button>
+        <button class="btn" onclick="restartQuiz()">🔄 Restart Quiz</button>
+      </div>
+    `;
+
+    scoreContainer.innerHTML = html;
+    container.style.display = "none";
+  }
+
+function navigateHistory(direction) {
+  currentPage += direction;
+  viewHistory();
+}
+
+function toggleSortOrder() {
+  sortNewestFirst = !sortNewestFirst;
+  viewHistory();
+}
+
+function restartQuiz() {
+  answeredQuestions = new Array(quizData.length).fill(false);
+  scoreContainer.innerHTML = '';
+  container.innerHTML = '';
+  currentPage = 1;
+  alertElement.style.display = "none";
+  startButton.style.display = "block";
+  container.style.display = "none";
+  questionCounter.textContent = "Ready?";
+  progressBar.style.width = "0%";
+}
+
+function toggleSound() {
+  const isMuted = correctSound.muted && wrongSound.muted;
+  correctSound.muted = !isMuted;
+  wrongSound.muted = !isMuted;
+  document.getElementById("sound-icon").textContent = isMuted ? "🔊" : "🔈";
+  document.getElementById("sound-text").textContent = isMuted ? "Sound ON" : "Sound OFF";
+}
+</script>
+
+</body>
+</html>
