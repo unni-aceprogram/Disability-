@@ -194,33 +194,282 @@ margin-top: 10px;
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-const quizData = [
-{"question":"Which city uses the IATA code ATQ?","options":["Agra","Amritsar","Aurangabad","Aizawl"],"correct":1,"explanation":"ATQ is the IATA code for Amritsar."},
-{"question":"Which city uses the IATA code SXR?","options":["Surat","Solapur","Srinagar","Shillong"],"correct":2,"explanation":"SXR is the IATA code for Srinagar."},
-{"question":"Which city uses the IATA code IXZ?","options":["Patna","Panaji","Pune","Port Blair"],"correct":3,"explanation":"IXZ is the IATA code for Port Blair."},
-{"question":"Which city uses the IATA code IXA?","options":["Agra","Aizawl","Agartala","Ajmer"],"correct":2,"explanation":"IXA is the IATA code for Agartala."},
-{"question":"Which city uses the IATA code AJL?","options":["Agartala","Aizawl","Aurangabad","Amritsar"],"correct":1,"explanation":"AJL is the IATA code for Aizawl."},
-{"question":"Which city uses the IATA code DIB?","options":["Delhi","Dibrugarh","Dehradun","Dimapur"],"correct":1,"explanation":"DIB is the IATA code for Dibrugarh."},
-{"question":"Which city uses the IATA code DMU?","options":["Dibrugarh","Mysore","Dimapur","Madurai"],"correct":2,"explanation":"DMU is the IATA code for Dimapur."},
-{"question":"Which city uses the IATA code IMF?","options":["Imphal","Idukki","Indore","Itanagar"],"correct":0,"explanation":"IMF is the IATA code for Imphal."},
-{"question":"Which city uses the IATA code IXM?","options":["Mangalore","Madurai","Mumbai","Mysore"],"correct":1,"explanation":"IXM is the IATA code for Madurai."},
-{"question":"Which city uses the IATA code TRZ?","options":["Tumkur","Tiruchirappalli","Trivandrum","Tirupati"],"correct":1,"explanation":"TRZ is the IATA code for Tiruchirappalli."},
-{"question":"Which city uses the IATA code CJB?","options":["Calicut","Chennai","Cochin","Coimbatore"],"correct":3,"explanation":"CJB is the IATA code for Coimbatore."},
-{"question":"Which city uses the IATA code CCJ?","options":["Cochin","Chennai","Calicut","Coimbatore"],"correct":2,"explanation":"CCJ is the IATA code for Calicut."},
-{"question":"Which city uses the IATA code TIR?","options":["Tirupati","Trichy","Tezpur","Tumkur"],"correct":0,"explanation":"TIR is the IATA code for Tirupati."},
-{"question":"Which city uses the IATA code VGA?","options":["Vellore","Varanasi","Vadodara","Vijayawada"],"correct":3,"explanation":"VGA is the IATA code for Vijayawada."},
-{"question":"Which city uses the IATA code VTZ?","options":["Vadodara","Vapi","Visakhapatnam","Vijayawada"],"correct":2,"explanation":"VTZ is the IATA code for Visakhapatnam."},
-{"question":"Which city uses the IATA code RPR?","options":["Raipur","Ranchi","Rajkot","Rameswaram"],"correct":0,"explanation":"RPR is the IATA code for Raipur."},
-{"question":"Which city uses the IATA code IXD?","options":["Panaji","Prayagraj","Pune","Patna"],"correct":1,"explanation":"IXD is the IATA code for Prayagraj."},
-{"question":"Which city uses the IATA code GWL?","options":["Goa","Gwalior","Gaya","Guwahati"],"correct":1,"explanation":"GWL is the IATA code for Gwalior."},
-{"question":"Which city uses the IATA code JLR?","options":["Jammu","Jabalpur","Jodhpur","Jaipur"],"correct":1,"explanation":"JLR is the IATA code for Jabalpur."},
-{"question":"Which city uses the IATA code JDH?","options":["Jamnagar","Jodhpur","Jaipur","Jalandhar"],"correct":1,"explanation":"JDH is the IATA code for Jodhpur."},
-{"question":"Which city uses the IATA code UDR?","options":["Ujjain","Ulhasnagar","Udaipur","Una"],"correct":2,"explanation":"UDR is the IATA code for Udaipur."},
-{"question":"Which city uses the IATA code BIK?","options":["Bhopal","Bikaner","Bangalore","Bhilai"],"correct":1,"explanation":"BIK is the IATA code for Bikaner."},
-{"question":"Which city uses the IATA code KNU?","options":["Kochi","Kolkata","Kullu","Kanpur"],"correct":3,"explanation":"KNU is the IATA code for Kanpur."},
-{"question":"Which city uses the IATA code DED?","options":["Delhi","Dimapur","Dehradun","Dibrugarh"],"correct":2,"explanation":"DED is the IATA code for Dehradun."},
-{"question":"Which city uses the IATA code IXU?","options":["Ahmedabad","Aizawl","Aurangabad","Agra"],"correct":2,"explanation":"IXU is the IATA code for Aurangabad."}
+const quizDataPart2 = [
+
+  {
+    "question": "Which SSR code is used for a passenger who can walk short distances but requires a wheelchair for long distances?",
+    "options": ["WCHS", "WCHR", "WCHC", "MEDA"],
+    "correct": 1,
+    "explanation": "WCHR (Wheelchair Ramp) is used for passengers who can walk short distances and climb steps but need assistance within the terminal."
+  },
+
+  {
+    "question": "Which SSR code indicates a passenger who cannot walk and requires wheelchair assistance up to the aircraft seat?",
+    "options": ["WCHS", "BLND", "WCHC", "DEAF"],
+    "correct": 2,
+    "explanation": "WCHC (Wheelchair Cabin) is used for passengers who require assistance up to their seat in the aircraft."
+  },
+
+  {
+    "question": "Which SSR code is used for a passenger who is both blind and deaf?",
+    "options": ["DEAF", "BLND", "WCHR", "MEDA"],
+    "correct": 1,
+    "explanation": "BLND is used for visually impaired passengers. Additional remarks are added if the passenger is both blind and deaf."
+  },
+
+  {
+    "question": "When providing assistance to a visually impaired passenger, staff should:",
+    "options": [
+      "Pull the passenger by the arm",
+      "Offer their elbow for guidance",
+      "Push from behind",
+      "Walk ahead without contact"
+    ],
+    "correct": 1,
+    "explanation": "Staff should offer their elbow so the passenger can hold and walk comfortably beside them."
+  },
+
+  {
+    "question": "Mobility aids with non-spillable batteries are:",
+    "options": [
+      "Not accepted for travel",
+      "Allowed only in cargo",
+      "Accepted as checked-in baggage",
+      "Allowed only on international flights"
+    ],
+    "correct": 2,
+    "explanation": "Wheelchairs or mobility aids with non-spillable batteries are accepted as checked-in baggage as per regulations."
+  },
+
+  {
+    "question": "Passengers requiring oxygen during flight are categorized under which SSR?",
+    "options": ["INFT", "MEDA", "SVAN", "WCHS"],
+    "correct": 1,
+    "explanation": "MEDA (Medical Assistance) SSR is used for passengers requiring medical clearance or special medical support."
+  },
+
+  {
+    "question": "Passengers seated in emergency exit rows must:",
+    "options": [
+      "Be medically certified",
+      "Be physically able to operate the exit",
+      "Travel with an attendant",
+      "Be frequent flyers"
+    ],
+    "correct": 1,
+    "explanation": "Emergency exit row passengers must be physically capable of operating the exit in case of emergency."
+  },
+
+  {
+    "question": "A passenger with hearing impairment is identified using which SSR code?",
+    "options": ["DEAF", "BLND", "WCHC", "STCR"],
+    "correct": 0,
+    "explanation": "DEAF SSR code is used for passengers with hearing impairment."
+  },
+
+  {
+    "question": "When assisting a wheelchair passenger during boarding, staff should:",
+    "options": [
+      "Board them last without priority",
+      "Ensure priority boarding",
+      "Ask them to walk if possible",
+      "Charge additional service fee"
+    ],
+    "correct": 1,
+    "explanation": "Passengers requiring wheelchair assistance are provided priority boarding."
+  },
+
+  {
+    "question": "If a passenger is traveling with a personal wheelchair, it should be:",
+    "options": [
+      "Charged as sports equipment",
+      "Refused due to size",
+      "Tagged appropriately and carried free of charge",
+      "Allowed only in cabin"
+    ],
+    "correct": 2,
+    "explanation": "Personal wheelchairs are tagged properly and carried free of charge."
+  },
+
+  {
+    "question": "Passengers with intellectual disabilities should be treated with:",
+    "options": [
+      "Impatience",
+      "Respect and clear communication",
+      "Medical terminology",
+      "Strict instructions only"
+    ],
+    "correct": 1,
+    "explanation": "Staff must treat passengers with intellectual disabilities respectfully and communicate clearly."
+  },
+
+  {
+    "question": "If a passenger refuses wheelchair assistance after booking WCHR, staff should:",
+    "options": [
+      "Force the service",
+      "Cancel the booking",
+      "Update the SSR accordingly",
+      "Deny boarding"
+    ],
+    "correct": 2,
+    "explanation": "If assistance is declined, the SSR must be updated in the system."
+  },
+
+  {
+    "question": "A passenger traveling with an escort due to medical reasons must:",
+    "options": [
+      "Pay double fare",
+      "Have escort details recorded in PNR",
+      "Sit separately",
+      "Book cargo space"
+    ],
+    "correct": 1,
+    "explanation": "Escort details must be properly recorded in the PNR for safety and coordination."
+  },
+
+  {
+    "question": "When explaining safety instructions to a visually impaired passenger, crew should:",
+    "options": [
+      "Skip the briefing",
+      "Provide individual safety briefing verbally",
+      "Hand over only safety card",
+      "Ask another passenger to explain"
+    ],
+    "correct": 1,
+    "explanation": "Crew must provide a personal verbal safety briefing to visually impaired passengers."
+  },
+
+  {
+    "question": "Passengers using prosthetic limbs are:",
+    "options": [
+      "Not allowed to travel",
+      "Required to submit medical certificate",
+      "Allowed to travel without restrictions",
+      "Seated only in last row"
+    ],
+    "correct": 2,
+    "explanation": "Passengers with prosthetic limbs are allowed to travel without special restrictions unless medical condition requires otherwise."
+  },
+
+  {
+    "question": "Battery terminals of mobility aids must be:",
+    "options": [
+      "Left exposed",
+      "Disconnected and protected from short circuit",
+      "Removed permanently",
+      "Painted for identification"
+    ],
+    "correct": 1,
+    "explanation": "Battery terminals must be disconnected and protected to prevent short circuits."
+  },
+
+  {
+    "question": "Passengers who are unable to understand safety instructions may require:",
+    "options": [
+      "Emergency exit seating",
+      "Additional cabin baggage",
+      "A safety assistant or escort",
+      "Priority baggage handling"
+    ],
+    "correct": 2,
+    "explanation": "Passengers unable to comprehend safety instructions may require an escort for safety compliance."
+  },
+
+  {
+    "question": "During disembarkation, wheelchair passengers should:",
+    "options": [
+      "Disembark first without assistance",
+      "Wait until assistance equipment arrives",
+      "Be asked to walk",
+      "Carry their own wheelchair"
+    ],
+    "correct": 1,
+    "explanation": "Wheelchair passengers should wait until proper assistance equipment is positioned."
+  },
+
+  {
+    "question": "Passengers requiring special meals due to medical reasons should:",
+    "options": [
+      "Bring their own food",
+      "Inform airline during booking",
+      "Request after boarding",
+      "Avoid long flights"
+    ],
+    "correct": 1,
+    "explanation": "Special meal requirements must be informed at the time of booking."
+  },
+
+  {
+    "question": "If an assistive device is damaged, staff must:",
+    "options": [
+      "Ignore the issue",
+      "Advise passenger to claim later",
+      "Follow damage reporting procedures immediately",
+      "Charge repair fee"
+    ],
+    "correct": 2,
+    "explanation": "Any damage to assistive devices must be reported and processed as per airline procedures."
+  },
+
+  {
+    "question": "Passengers with temporary injuries (e.g., fractured leg) should be categorized under:",
+    "options": ["WCHR/WCHS/WCHC as applicable", "BLND", "SVAN", "INFT"],
+    "correct": 0,
+    "explanation": "Temporary mobility limitations are categorized under appropriate wheelchair SSR codes."
+  },
+
+  {
+    "question": "Staff should avoid which behavior while assisting PRM customers?",
+    "options": [
+      "Asking how they prefer assistance",
+      "Making assumptions about limitations",
+      "Using respectful language",
+      "Providing clear instructions"
+    ],
+    "correct": 1,
+    "explanation": "Staff must not assume limitations; always ask how they prefer to be assisted."
+  },
+
+  {
+    "question": "Passengers with service animals other than guide dogs are:",
+    "options": [
+      "Automatically approved",
+      "Allowed without documentation",
+      "Subject to airline policy and approval",
+      "Allowed in cabin without notice"
+    ],
+    "correct": 2,
+    "explanation": "Service animals other than guide dogs are subject to airline approval and policies."
+  },
+
+  {
+    "question": "Passengers requiring continuous medical monitoring onboard must:",
+    "options": [
+      "Travel without escort",
+      "Sit in exit row",
+      "Have prior medical clearance",
+      "Pay excess baggage"
+    ],
+    "correct": 2,
+    "explanation": "Continuous medical monitoring requires prior medical clearance from the airline."
+  },
+
+  {
+    "question": "Respectful communication with PRM passengers includes:",
+    "options": [
+      "Talking only to companion",
+      "Using childlike tone",
+      "Maintaining eye contact and speaking clearly",
+      "Ignoring direct questions"
+    ],
+    "correct": 2,
+    "explanation": "Staff should maintain eye contact and speak clearly and respectfully to the passenger."
+  }
+
 ];
+
+
+
 
 
     let currentQuestion = 0;
@@ -485,3 +734,4 @@ startButton.addEventListener("click", startQuiz);
 </script>
 </body>
 </html>
+
