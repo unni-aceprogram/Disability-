@@ -3,7 +3,7 @@
 <head>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap">
 <meta charset="UTF-8" />
-<title>Disability | Quiz 2</title>
+<title>Disability | RETEST</title>
 <style>
 body {
 font-family: 'Inter', Arial, sans-serif;
@@ -178,7 +178,7 @@ margin-top: 10px;
 </head>
 <body>
 <div class="container">
-<h1>Disability | Quiz 2</h1>
+<h1>Disability | RETEST PRACTICE</h1>
 <div id="sound-toggle" onclick="toggleSound()">
 <span id="sound-icon">🔊</span> <span id="sound-text">Sound ON</span>
 </div>
@@ -195,122 +195,250 @@ margin-top: 10px;
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 
+```javascript
 const quizData = [
 
   {
-    "question": "Which document may IndiGo request from passengers with certain medical conditions before accepting them for travel?",
+    "question": "Customers with Reduced Mobility (PRM) are also referred to as:",
     "options": [
-      "Government disability certificate",
-      "Medical Information Form (MEDIF)",
+      "CIP Customers",
+      "Customers with Disability (PWD)",
+      "Senior Citizen Travelers",
+      "Medical Emergency Passengers"
+    ],
+    "correct": 1,
+    "explanation": "Customers with Reduced Mobility (PRM) are also termed as Customers with Disability (PWD)."
+  },
+
+  {
+    "question": "IndiGo will insist on a medical or fit-to-fly certificate for:",
+    "options": [
+      "Customers requiring medical attention or special equipment during flight",
+      "All customers with disability",
+      "Customers traveling with assistive devices",
+      "Only senior citizens"
+    ],
+    "correct": 0,
+    "explanation": "A medical certificate is required only for customers who need medical attention and/or special equipment during the flight."
+  },
+
+  {
+    "question": "While conversing with a PRM customer, staff should:",
+    "options": [
+      "Avoid speaking directly to them",
+      "Put the person before the disability",
+      "Refer to them as disabled passengers",
+      "Use medical terms to describe the disability"
+    ],
+    "correct": 1,
+    "explanation": "Staff should put the person before the disability and eliminate prejudicial descriptors."
+  },
+
+  {
+    "question": "Which term should be used instead of 'handicap' while interacting with customers?",
+    "options": [
+      "Disabled person",
+      "Special case",
+      "Invalid",
+      "Disability"
+    ],
+    "correct": 3,
+    "explanation": "The word 'disability' should be used rather than 'handicap'."
+  },
+
+  {
+    "question": "Customers traveling with a guide dog must inform IndiGo at least:",
+    "options": [
+      "24 hours before departure",
+      "72 hours before departure",
+      "12 hours before departure",
+      "48 hours before departure"
+    ],
+    "correct": 3,
+    "explanation": "Customers intending to travel with a guide dog must inform IndiGo at least 48 hours prior to departure."
+  },
+
+  {
+    "question": "Where will a customer traveling with a guide dog be seated?",
+    "options": [
+      "First row window seat",
+      "Emergency exit row",
+      "Last row aisle seat",
+      "Any available middle seat"
+    ],
+    "correct": 0,
+    "explanation": "The customer will be provided the first row window seat for ease of accessibility."
+  },
+
+  {
+    "question": "How many guide dogs are accepted per flight per sector?",
+    "options": [
+      "Two",
+      "One",
+      "Three",
+      "Unlimited"
+    ],
+    "correct": 1,
+    "explanation": "Only one guide dog can be accepted per flight per sector."
+  },
+
+  {
+    "question": "Guide dogs are not permitted on which aircraft type?",
+    "options": [
+      "ATR 72-600",
+      "Airbus 321",
+      "Boeing 737",
+      "Airbus 320"
+    ],
+    "correct": 0,
+    "explanation": "Guide dogs are not allowed on ATR 72-600 aircraft due to safety reasons."
+  },
+
+  {
+    "question": "At check-in, customers traveling with a guide dog must present:",
+    "options": [
+      "Travel insurance",
       "Airport entry pass",
-      "Travel insurance policy"
-    ],
-    "correct": 1,
-    "explanation": "For certain medical conditions, IndiGo may require a completed Medical Information Form (MEDIF) to assess fitness to fly."
-  },
-  {
-    "question": "Which of the following passengers is NOT permitted to travel unaccompanied under IndiGo’s disability guidelines?",
-    "options": [
-      "A passenger who cannot communicate safety instructions",
-      "A passenger using a walking stick",
-      "A passenger with minor hearing impairment",
-      "A passenger wearing prescription glasses"
-    ],
-    "correct": 0,
-    "explanation": "Passengers who are unable to understand or respond to safety instructions may be required to travel with a safety assistant."
-  },
-  {
-    "question": "What support does IndiGo provide to visually impaired passengers at the airport?",
-    "options": [
-      "Dedicated personal attendant throughout the journey",
-      "Guidance assistance through terminal areas",
-      "Special discounted airfare",
-      "Reserved front-row seating"
-    ],
-    "correct": 1,
-    "explanation": "IndiGo provides guidance assistance to help visually impaired passengers navigate through terminal areas when requested."
-  },
-  {
-    "question": "Which of the following best describes IndiGo’s policy on onboard medical assistance?",
-    "options": [
-      "Cabin crew provide full medical treatment",
-      "Cabin crew provide basic first aid only",
-      "Doctors are always available on every flight",
-      "Medical emergencies are not supported onboard"
-    ],
-    "correct": 1,
-    "explanation": "IndiGo cabin crew are trained to provide basic first aid but are not medical professionals and cannot offer advanced medical treatment."
-  },
-  {
-    "question": "How does IndiGo handle passengers travelling with service or assistive animals?",
-    "options": [
-      "Animals are always allowed in the cabin without restrictions",
-      "Animals are permitted subject to regulatory approvals and airline policy",
-      "Animals are never allowed on any IndiGo flight",
-      "Animals must travel only as checked baggage"
-    ],
-    "correct": 1,
-    "explanation": "Carriage of service or assistive animals is subject to regulatory approvals and IndiGo’s specific policy conditions."
-  },
-  {
-    "question": "Which onboard facility is NOT available on IndiGo aircraft for passengers with reduced mobility?",
-    "options": [
-      "Movable armrest seats on selected rows",
-      "Wheelchair accessible lavatory",
-      "Aisle wheelchair for in-cabin movement",
-      "Crew assistance to reach assigned seat"
-    ],
-    "correct": 1,
-    "explanation": "IndiGo aircraft are not equipped with wheelchair-accessible lavatories; accessibility support is limited onboard."
-  },
-  {
-    "question": "Passengers requiring stretcher support can be accepted for travel by IndiGo only if:",
-    "options": [
-      "They purchase any available seat",
-      "They submit a MEDIF and meet airline medical criteria",
-      "They arrive early at the airport",
-      "They carry a government disability ID"
-    ],
-    "correct": 1,
-    "explanation": "Passengers requiring stretcher support must submit a MEDIF and meet IndiGo’s medical and operational acceptance criteria."
-  },
-  {
-    "question": "Which of the following is a responsibility of the passenger when requesting disability assistance?",
-    "options": [
-      "Ensuring timely advance notification to the airline",
-      "Arranging airport security clearance",
-      "Providing training to cabin crew",
-      "Managing aircraft seating policy"
-    ],
-    "correct": 0,
-    "explanation": "Passengers are responsible for informing the airline in advance so that appropriate assistance arrangements can be made."
-  },
-  {
-    "question": "IndiGo staff can assist passengers with reduced mobility in which of the following tasks?",
-    "options": [
-      "Eating meals onboard",
-      "Personal hygiene tasks",
-      "Moving to and from the aircraft seat",
-      "Administering medication"
+      "Vaccination certificate for the dog",
+      "Pet purchase receipt"
     ],
     "correct": 2,
-    "explanation": "IndiGo staff can assist passengers with moving to and from their seat, but cannot provide personal care such as feeding or medication."
+    "explanation": "A valid vaccination certificate must be presented as proof that the guide dog is vaccinated and medicated."
   },
+
   {
-    "question": "Which of the following best reflects IndiGo’s approach to dignity and respect for passengers with disabilities?",
+    "question": "If a guide dog poses a safety or health risk, IndiGo may:",
     "options": [
-      "Assistance is optional and not prioritized",
-      "Support is provided with dignity, respect, and sensitivity",
-      "Only mandatory legal requirements are followed",
-      "Assistance is limited to check-in counters"
+      "Provide separate seating",
+      "Upgrade the customer",
+      "Charge additional baggage fees",
+      "Deny boarding or remove the guide dog"
+    ],
+    "correct": 3,
+    "explanation": "IndiGo reserves the right to deny boarding or remove the guide dog if it poses a health or safety risk."
+  },
+
+  {
+    "question": "Stretcher reservations must be processed through:",
+    "options": [
+      "Website",
+      "Call center",
+      "Travel agent only",
+      "Airport check-in counter"
     ],
     "correct": 1,
-    "explanation": "IndiGo commits to providing assistance to passengers with disabilities in a manner that ensures dignity, respect, and sensitivity."
+    "explanation": "Stretcher reservations can only be processed through the call center."
+  },
+
+  {
+    "question": "For stretcher cases, how many seats are charged as part of the arrangement?",
+    "options": [
+      "6 seats",
+      "12 seats",
+      "9 seats",
+      "3 seats"
+    ],
+    "correct": 2,
+    "explanation": "The cost includes 9 seats for stretcher installation."
+  },
+
+  {
+    "question": "A stretcher passenger must always be escorted by:",
+    "options": [
+      "Cabin crew",
+      "An able-bodied family member or doctor",
+      "Airport security",
+      "Any co-passenger"
+    ],
+    "correct": 1,
+    "explanation": "Customers traveling on a stretcher must be escorted by an able-bodied family member or doctor."
+  },
+
+  {
+    "question": "Stretcher bookings are not permitted on:",
+    "options": [
+      "International sectors",
+      "Airbus 320",
+      "ATR 72-600",
+      "Airbus 321"
+    ],
+    "correct": 2,
+    "explanation": "IndiGo shall not book a stretcher on ATR 72-600 flights."
+  },
+
+  {
+    "question": "Assistive devices such as wheelchairs and crutches are:",
+    "options": [
+      "Charged as excess baggage",
+      "Carried free of charge",
+      "Allowed only in cabin",
+      "Not accepted onboard"
+    ],
+    "correct": 1,
+    "explanation": "IndiGo does not charge for any assistive devices."
+  },
+
+  {
+    "question": "DAA tag stands for:",
+    "options": [
+      "Delivery at Aircraft",
+      "Domestic Arrival Allocation",
+      "Disabled Assistance Approval",
+      "Direct Airport Access"
+    ],
+    "correct": 0,
+    "explanation": "DAA stands for Delivery at Aircraft, used for assistive devices delivered at the aircraft door."
+  },
+
+  {
+    "question": "Which SSR code is used for a visually impaired passenger traveling with a guide dog?",
+    "options": [
+      "WCHR",
+      "SVAN",
+      "BLND",
+      "DEAF"
+    ],
+    "correct": 1,
+    "explanation": "SVAN is the SSR code used for visually impaired customers traveling with guide dogs."
+  },
+
+  {
+    "question": "Which SSR code represents a stretcher customer?",
+    "options": [
+      "INFT",
+      "WCHC",
+      "STCR",
+      "MEDA"
+    ],
+    "correct": 2,
+    "explanation": "STCR is the SSR code used for stretcher customers."
+  },
+
+  {
+    "question": "Which SSR code indicates Wheelchair Until Cabin?",
+    "options": [
+      "WCHR",
+      "BLND",
+      "WCHC",
+      "WCHW"
+    ],
+    "correct": 2,
+    "explanation": "WCHC stands for Wheelchair Until Cabin."
+  },
+
+  {
+    "question": "While interacting with a wheelchair customer, staff should:",
+    "options": [
+      "Avoid direct eye contact",
+      "Go on their haunches to interact at eye level",
+      "Speak to the attendant only",
+      "Stand and speak loudly"
+    ],
+    "correct": 1,
+    "explanation": "Staff should go on their haunches while interacting with wheelchair customers to maintain respectful communication."
   }
 
-
 ];
-
  let currentQuestion = 0;
 let score = 0;
 let timer;
@@ -573,3 +701,4 @@ startButton.addEventListener("click", startQuiz);
 </script>
 </body>
 </html>
+
